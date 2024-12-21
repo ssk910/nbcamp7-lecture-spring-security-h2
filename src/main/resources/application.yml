@@ -31,7 +31,7 @@ logging:
       netty: DEBUG
 
 jwt:
-  # 실제 운영 환경에서는 환경 변수를 이용하세요!
-  # JWT secret key 생성 - https://jwtsecret.com/generate
+  # JWT secret key(실제 운영 환경에서는 환경 변수를 이용하세요. 생성 - https://jwt-keys.21no.de/)
   secret: "036c4fe3ec667532545b9e8fa7e2a98a22f439dff102623c097715060e2da68c"
+  # 토큰 만료시간 (밀리초)
   expiry-millis: 300000 # 5분
