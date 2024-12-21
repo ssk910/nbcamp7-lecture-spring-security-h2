@@ -62,7 +62,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     // 토큰 검증.
     String token = this.getTokenFromRequest(request);
-    if (!jwtTokenProvider.isValidToken(token)) {
+    if (!jwtTokenProvider.validToken(token)) {
       return;
     }
 

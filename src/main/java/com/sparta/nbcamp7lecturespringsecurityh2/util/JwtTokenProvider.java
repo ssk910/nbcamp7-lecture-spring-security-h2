@@ -88,7 +88,7 @@ public class JwtTokenProvider {
    *   <li>{@code false} - 유효하지 않음.</li>
    * </ul>
    */
-  public boolean isValidToken(String token) {
+  public boolean validToken(String token) {
     try {
       return !this.isTokenExpired(token);
     } catch (MalformedJwtException e) {
@@ -115,7 +115,8 @@ public class JwtTokenProvider {
   private String generateTokenBy(String email) throws EntityNotFoundException {
     Date currentDate = new Date();
     Date expireDate = new Date(currentDate.getTime() + jwtExpirationMillis);
-    Member member = this.memberRepository.findMemberByEmail(email);
+    Member member = this.memberRepository.findByEmail(email)
+        .orElseThrow(() -> new EntityNotFoundException("해당 email에 맞는 값이 존재하지 않습니다."));
 
     return Jwts.builder()
         .subject(email)
