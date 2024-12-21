@@ -60,7 +60,6 @@ public class SecurityConfig {
    */
   @Bean
   AuthenticationProvider authenticationProvider() {
-    // AuthenticationProvider의 구현체 클래스로 DaoAuthenticationProvider를 지정합니다.
     DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
     log.debug("AuthenticationProvider 설정. 구현체: {}", authProvider.getClass().getSimpleName());
 

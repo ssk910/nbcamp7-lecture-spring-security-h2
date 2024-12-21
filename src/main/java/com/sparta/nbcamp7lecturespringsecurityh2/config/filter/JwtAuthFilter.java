@@ -1,6 +1,7 @@
 package com.sparta.nbcamp7lecturespringsecurityh2.config.filter;
 
 import com.sparta.nbcamp7lecturespringsecurityh2.util.JwtTokenProvider;
+import com.sparta.nbcamp7lecturespringsecurityh2.util.TokenType;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -58,7 +59,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
    * @param request {@link HttpServletRequest}
    */
   private void authenticate(HttpServletRequest request) {
-    log.debug("인증 처리.");
+    log.info("인증 처리.");
 
     // 토큰 검증.
     String token = this.getTokenFromRequest(request);
@@ -84,12 +85,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
    */
   private String getTokenFromRequest(HttpServletRequest request) {
     final String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-    final String TOKEN_BEARER_PREFIX = "Bearer ";
+    final String headerPrefix = TokenType.generateHeaderPrefix(TokenType.BEARER);
 
     boolean tokenFound =
-        StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_BEARER_PREFIX);
+        StringUtils.hasText(bearerToken) && bearerToken.startsWith(headerPrefix);
     if (tokenFound) {
-      return bearerToken.substring(TOKEN_BEARER_PREFIX.length());
+      return bearerToken.substring(headerPrefix.length());
     }
 
     return null;
@@ -112,7 +113,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
    * @param userDetails 찾아온 사용자 정보
    */
   private void setAuthentication(HttpServletRequest request, UserDetails userDetails) {
-    log.debug("SecurityContext에 Authentication 저장.");
+    log.info("SecurityContext에 Authentication 저장.");
 
     // 찾아온 사용자 정보로 인증 객체를 생성.
     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

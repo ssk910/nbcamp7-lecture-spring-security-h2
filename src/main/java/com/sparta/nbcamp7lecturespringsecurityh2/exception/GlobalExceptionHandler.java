@@ -1,6 +1,6 @@
 package com.sparta.nbcamp7lecturespringsecurityh2.exception;
 
-import com.sparta.nbcamp7lecturespringsecurityh2.dto.CommonResponseBody;
+import com.sparta.nbcamp7lecturespringsecurityh2.dto.common.CommonResponseBody;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(HandlerMethodValidationException.class)
   protected ResponseEntity<CommonResponseBody<String>> handleMethodValidationExceptions(
       HandlerMethodValidationException e) {
-    String message = e.getParameterValidationResults().get(0).getResolvableErrors().get(0)
+    String message = e.getParameterValidationResults().getFirst().getResolvableErrors().getFirst()
         .getDefaultMessage();
 
     return ResponseEntity
@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<CommonResponseBody<String>> handleValidationExceptions(
       MethodArgumentNotValidException e) {
-    String message = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+    String message = e.getBindingResult().getAllErrors().getFirst().getDefaultMessage();
 
     return ResponseEntity
         .status(HttpStatus.BAD_REQUEST)

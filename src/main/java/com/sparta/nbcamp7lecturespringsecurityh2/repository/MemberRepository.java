@@ -27,15 +27,4 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     return this.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("해당 ID에 맞는 값이 존재하지 않습니다."));
   }
-
-  /**
-   * 입력받은 email에 해당하는 Member를 리턴.
-   *
-   * @param email 가져올 Member의 email
-   * @return {@link Member}
-   */
-  default Member findMemberByEmail(String email) {
-    return this.findByEmail(email)
-        .orElseThrow(() -> new IllegalArgumentException("해당 email에 맞는 값이 존재하지 않습니다."));
-  }
 }

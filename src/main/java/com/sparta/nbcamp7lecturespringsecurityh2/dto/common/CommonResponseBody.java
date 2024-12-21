@@ -1,5 +1,7 @@
-package com.sparta.nbcamp7lecturespringsecurityh2.dto;
+package com.sparta.nbcamp7lecturespringsecurityh2.dto.common;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import lombok.Getter;
 
 /**
@@ -19,9 +21,11 @@ public class CommonResponseBody<T> {
    * Response 메세지.
    */
   private final String message;
+
   /**
    * Response 데이터.
    */
+  @JsonInclude(Include.NON_NULL)
   private final T data;
 
   /**
