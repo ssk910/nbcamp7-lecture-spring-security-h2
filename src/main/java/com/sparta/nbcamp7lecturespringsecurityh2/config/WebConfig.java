@@ -6,6 +6,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -61,10 +63,10 @@ public class WebConfig {
     http.cors(AbstractHttpConfigurer::disable)
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(auth ->
-            auth.requestMatchers(WHITE_LIST_URL).permitAll()
+                auth.requestMatchers(WHITE_LIST_URL).permitAll()
 //                .requestMatchers("/auth/admin").hasRole("ADMIN")
 //                .requestMatchers("/auth/customer", "/auth/all").hasAnyRole("ADMIN", "CUSTOMER")
-                .anyRequest().authenticated()
+                    .anyRequest().authenticated()
         )
         // Spring Security 예외에 대한 처리를 핸들러에 위임.
         .exceptionHandling(handler ->
@@ -77,6 +79,20 @@ public class WebConfig {
         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
+  }
+
+  /**
+   * 사용자 권한의 계층을 설정.
+   * @return {@link RoleHierarchy}
+   */
+  @Bean
+  public RoleHierarchy roleHierarchy() {
+    return RoleHierarchyImpl.fromHierarchy(
+        // "ROLE_ADMIN > ROLE_STAFF > ROLE_GUEST\nROLE_ADMIN > ROLE_USER > ROLE_GUEST"
+        """
+            ROLE_ADMIN > ROLE_STAFF > ROLE_GUEST
+            ROLE_ADMIN > ROLE_USER > ROLE_GUEST
+            """);
   }
 
   /**
