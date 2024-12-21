@@ -30,10 +30,10 @@ public class Member extends BaseEntity {
   private Long id;
 
   /**
-   * 사용자 이름.
+   * 사용자 이메일.
    */
   @Column(unique = true)
-  private String username;
+  private String email;
 
   /**
    * 비밀번호.
@@ -56,23 +56,23 @@ public class Member extends BaseEntity {
   /**
    * 생성자.
    *
-   * @param username 사용자 이름
+   * @param email 사용자 이메일
    * @param password 비밀번호
    */
-  public Member(String username, String password) {
-    this.username = username;
+  public Member(String email, String password) {
+    this.email = email;
     this.password = password;
   }
 
   /**
    * 생성자.
    *
-   * @param username 사용자 이름
+   * @param email 사용자 이메일
    * @param password 비밀번호
    * @param role     사용자의 권한
    */
-  public Member(String username, String password, Role role) {
-    this.username = username;
+  public Member(String email, String password, Role role) {
+    this.email = email;
     this.password = password;
     this.role = role;
   }

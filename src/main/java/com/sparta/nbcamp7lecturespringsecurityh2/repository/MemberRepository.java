@@ -15,7 +15,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-  Optional<Member> findByUsername(String username);
+  Optional<Member> findByEmail(String email);
 
   /**
    * 입력받은 id에 해당하는 Member를 리턴.
@@ -29,13 +29,13 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
   }
 
   /**
-   * 입력받은 username에 해당하는 Member를 리턴.
+   * 입력받은 email에 해당하는 Member를 리턴.
    *
-   * @param username 가져올 Member의 username
+   * @param email 가져올 Member의 email
    * @return {@link Member}
    */
-  default Member findMemberByUsername(String username) {
-    return this.findByUsername(username)
-        .orElseThrow(() -> new IllegalArgumentException("해당 username에 맞는 값이 존재하지 않습니다."));
+  default Member findMemberByEmail(String email) {
+    return this.findByEmail(email)
+        .orElseThrow(() -> new IllegalArgumentException("해당 email에 맞는 값이 존재하지 않습니다."));
   }
 }
