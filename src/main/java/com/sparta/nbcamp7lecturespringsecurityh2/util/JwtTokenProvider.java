@@ -1,4 +1,4 @@
-package com.sparta.nbcamp7lecturespringsecurityh2.config;
+package com.sparta.nbcamp7lecturespringsecurityh2.util;
 
 import com.sparta.nbcamp7lecturespringsecurityh2.entity.Member;
 import com.sparta.nbcamp7lecturespringsecurityh2.repository.MemberRepository;

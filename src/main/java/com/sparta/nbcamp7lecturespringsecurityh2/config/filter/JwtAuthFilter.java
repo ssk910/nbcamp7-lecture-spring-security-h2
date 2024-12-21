@@ -1,6 +1,6 @@
 package com.sparta.nbcamp7lecturespringsecurityh2.config.filter;
 
-import com.sparta.nbcamp7lecturespringsecurityh2.config.JwtTokenProvider;
+import com.sparta.nbcamp7lecturespringsecurityh2.util.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
