@@ -2,7 +2,7 @@ spring:
   application:
     name: "nbcamp7-lecture-spring-security-h2"
   datasource:
-    url: "jdbc:h2:~/test;MODE=MYSQL"
+    url: "jdbc:h2:~/security_test;MODE=MYSQL"
     username: sa
     password:
     driver-class-name: org.h2.Driver
