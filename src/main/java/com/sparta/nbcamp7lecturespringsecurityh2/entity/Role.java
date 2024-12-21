@@ -58,7 +58,7 @@ public enum Role {
    */
   public static Role of(String roleName) throws IllegalArgumentException {
     for (Role role : values()) {
-      if (role.getName().equals(roleName)) {
+      if (role.getName().equals(roleName.toLowerCase())) {
         return role;
       }
     }
