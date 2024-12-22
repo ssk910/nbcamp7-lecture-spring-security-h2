@@ -15,10 +15,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
  */
 @Getter
 public enum Role {
-  /**
-   * guest 권한.
-   */
-  GUEST("guest"),
 
   /**
    * user 권한.
@@ -26,7 +22,7 @@ public enum Role {
   USER("user"),
 
   /**
-   * user 권한.
+   * staff 권한.
    */
   STAFF("staff"),
 

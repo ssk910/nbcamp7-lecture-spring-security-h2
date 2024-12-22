@@ -42,26 +42,15 @@ public class Member extends BaseEntity {
   private String password;
 
   /**
-   * 사용자의 권한. 기본값은 {@code Role.GUEST}입니다.
+   * 사용자의 권한.
    */
   @Enumerated(value = EnumType.STRING)
-  private Role role = Role.GUEST;
+  private Role role;
 
   /**
    * 기본 생성자.
    */
   public Member() {
-  }
-
-  /**
-   * 생성자.
-   *
-   * @param email    사용자 이메일
-   * @param password 비밀번호
-   */
-  public Member(String email, String password) {
-    this.email = email;
-    this.password = password;
   }
 
   /**

@@ -24,8 +24,8 @@ import org.springframework.web.server.ResponseStatusException;
  * @version 1.0
  * @since 1.0
  */
-@RestControllerAdvice
 @Slf4j
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
   /**
@@ -133,6 +133,7 @@ public class GlobalExceptionHandler {
    */
   @ExceptionHandler(Exception.class)
   protected ResponseEntity<CommonResponseBody<Void>> handleOtherExceptions(Exception e) {
+    log.error(e.getMessage());
     return ResponseEntity
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(new CommonResponseBody<>(e.getMessage()));

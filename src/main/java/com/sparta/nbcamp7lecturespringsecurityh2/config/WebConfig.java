@@ -64,20 +64,19 @@ public class WebConfig {
     http.cors(AbstractHttpConfigurer::disable)
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(auth ->
-                auth.requestMatchers(WHITE_LIST).permitAll()
-                    // static 경로
-                    .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                    .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE, DispatcherType.ERROR).permitAll()
-//                    .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
-//                .requestMatchers("/auth/admin").hasRole("ADMIN")
-                    .requestMatchers("/accounts/logout").hasAnyRole("ADMIN", "STAFF", "USER", "GUEST")
-                    .anyRequest().authenticated()
+            auth.requestMatchers(WHITE_LIST).permitAll()
+                // static 경로
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE,
+                    DispatcherType.ERROR).permitAll()
+                .requestMatchers("/accounts/logout").hasAnyRole("ADMIN", "STAFF", "USER")
+                .anyRequest().authenticated()
         )
         // Spring Security 예외에 대한 처리를 핸들러에 위임.
         .exceptionHandling(handler ->
             handler.authenticationEntryPoint(authEntryPoint)
         )
-        // SecurityContext를 가져올 때 HttpSession을 사용하지 않도록 설정.
+        // JWT 기반 테스트를 위해 SecurityContext를 가져올 때 HttpSession을 사용하지 않도록 설정.
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authenticationProvider(authenticationProvider)
@@ -88,15 +87,16 @@ public class WebConfig {
 
   /**
    * 사용자 권한의 계층을 설정.
+   *
    * @return {@link RoleHierarchy}
    */
   @Bean
   public RoleHierarchy roleHierarchy() {
     return RoleHierarchyImpl.fromHierarchy(
-        // "ROLE_ADMIN > ROLE_STAFF > ROLE_GUEST\nROLE_ADMIN > ROLE_USER > ROLE_GUEST"
+        // "ROLE_ADMIN > ROLE_STAFF\nROLE_ADMIN > ROLE_USER"
         """
-            ROLE_ADMIN > ROLE_STAFF > ROLE_GUEST
-            ROLE_ADMIN > ROLE_USER > ROLE_GUEST
+            ROLE_ADMIN > ROLE_STAFF
+            ROLE_ADMIN > ROLE_USER
             """);
   }
 
