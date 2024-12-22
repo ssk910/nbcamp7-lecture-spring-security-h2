@@ -29,7 +29,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * @since 1.0
  */
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity // SecurityFilterChain 빈 설정을 위해 필요.
 @RequiredArgsConstructor
 public class WebConfig {
 
