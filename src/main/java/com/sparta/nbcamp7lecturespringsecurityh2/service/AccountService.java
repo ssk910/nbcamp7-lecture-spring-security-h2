@@ -5,8 +5,8 @@ import com.sparta.nbcamp7lecturespringsecurityh2.dto.AccountRequest;
 import com.sparta.nbcamp7lecturespringsecurityh2.entity.Member;
 import com.sparta.nbcamp7lecturespringsecurityh2.entity.Role;
 import com.sparta.nbcamp7lecturespringsecurityh2.repository.MemberRepository;
-import com.sparta.nbcamp7lecturespringsecurityh2.util.JwtTokenProvider;
-import com.sparta.nbcamp7lecturespringsecurityh2.util.TokenType;
+import com.sparta.nbcamp7lecturespringsecurityh2.util.JwtProvider;
+import com.sparta.nbcamp7lecturespringsecurityh2.util.AuthenticationScheme;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 /**
  * create on 2024. 12. 21. create by IntelliJ IDEA.
  *
- * <p> 클래스 설명 </p>
+ * <p> 사용자 서비스. </p>
  *
  * @author Seokgyu Hwang (Chris)
  * @version 1.0
@@ -35,7 +35,8 @@ public class AccountService {
   private final MemberRepository memberRepository;
   private final PasswordEncoder passwordEncoder;
   private final AuthenticationManager authenticationManager;
-  private final JwtTokenProvider jwtTokenProvider;
+  private final JwtProvider jwtProvider;
+  private final RefreshTokenService refreshTokenService;
 
   /**
    * 이메일이 중복되지 않으면 가입처리.
@@ -46,9 +47,8 @@ public class AccountService {
    */
   public void createAccount(AccountRequest accountRequest, String role)
       throws DuplicateKeyException {
-    boolean duplicatedMember = this.memberRepository.findByEmail(accountRequest.getEmail())
-        .isPresent();
-    if (duplicatedMember) {
+    boolean duplicated = this.memberRepository.findByEmail(accountRequest.getEmail()).isPresent();
+    if (duplicated) {
       throw new DuplicateKeyException("중복된 이메일입니다.");
     }
 
@@ -66,18 +66,18 @@ public class AccountService {
     this.validatePassword(accountRequest.getPassword(), member.getPassword());
 
     // 사용자 인증 후 인증 객체를 저장
-    Authentication authentication = authenticationManager.authenticate(
+    Authentication authentication = this.authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(accountRequest.getEmail(),
             accountRequest.getPassword()));
     log.info("SecurityContext에 Authentication 저장.");
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
     // 토큰 생성
-    String token = this.jwtTokenProvider.generateToken(authentication);
+    String accessToken = this.jwtProvider.generateToken(authentication);
+    String refreshToken = this.refreshTokenService.generateRefreshToken(accountRequest.getEmail());
     log.info("토큰 생성.");
 
-    return new JwtAuthResponse(token, TokenType.BEARER.getName(),
-        this.jwtTokenProvider.getJwtExpirationMillis());
+    return new JwtAuthResponse(AuthenticationScheme.BEARER.getName(), accessToken, refreshToken);
   }
 
   /**

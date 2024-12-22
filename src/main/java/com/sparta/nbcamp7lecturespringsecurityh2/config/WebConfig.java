@@ -1,6 +1,7 @@
 package com.sparta.nbcamp7lecturespringsecurityh2.config;
 
 import com.sparta.nbcamp7lecturespringsecurityh2.config.filter.JwtAuthFilter;
+import jakarta.servlet.DispatcherType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -9,8 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -28,7 +29,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * @since 1.0
  */
 @Configuration
-@EnableMethodSecurity
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class WebConfig {
 
@@ -50,7 +51,7 @@ public class WebConfig {
   /**
    * 화이트 리스트.
    */
-  private static final String[] WHITE_LIST_URL = {"/auth/login"};
+  private static final String[] WHITE_LIST = {"/accounts/login", "/favicon.ico", "/error"};
 
   /**
    * security 필터.
@@ -63,9 +64,13 @@ public class WebConfig {
     http.cors(AbstractHttpConfigurer::disable)
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(auth ->
-                auth.requestMatchers(WHITE_LIST_URL).permitAll()
+                auth.requestMatchers(WHITE_LIST).permitAll()
+                    // static 경로
+                    .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                    .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE, DispatcherType.ERROR).permitAll()
+//                    .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
 //                .requestMatchers("/auth/admin").hasRole("ADMIN")
-//                .requestMatchers("/auth/customer", "/auth/all").hasAnyRole("ADMIN", "CUSTOMER")
+                    .requestMatchers("/accounts/logout").hasAnyRole("ADMIN", "STAFF", "USER", "GUEST")
                     .anyRequest().authenticated()
         )
         // Spring Security 예외에 대한 처리를 핸들러에 위임.

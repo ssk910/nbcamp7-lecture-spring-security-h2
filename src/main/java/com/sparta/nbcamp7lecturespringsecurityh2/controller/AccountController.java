@@ -9,9 +9,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version 1.0
  * @since 1.0
  */
-
+@Slf4j
 @RestController
 @RequestMapping(value = "/accounts")
 @RequiredArgsConstructor
@@ -86,6 +88,8 @@ public class AccountController {
     // 인증 정보가 있다면 로그아웃 처리.
     if (authentication != null && authentication.isAuthenticated()) {
       new SecurityContextLogoutHandler().logout(request, response, authentication);
+
+      log.info("인증 객체의 삭제 확인: {}", SecurityContextHolder.getContext().getAuthentication() == null);
       return ResponseEntity.ok(new CommonResponseBody<>("로그아웃 성공."));
     }
 

@@ -1,7 +1,7 @@
 package com.sparta.nbcamp7lecturespringsecurityh2.config.filter;
 
-import com.sparta.nbcamp7lecturespringsecurityh2.util.JwtTokenProvider;
-import com.sparta.nbcamp7lecturespringsecurityh2.util.TokenType;
+import com.sparta.nbcamp7lecturespringsecurityh2.util.AuthenticationScheme;
+import com.sparta.nbcamp7lecturespringsecurityh2.util.JwtProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,7 +36,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
   /**
    * JWT 토큰 제공자.
    */
-  private final JwtTokenProvider jwtTokenProvider;
+  private final JwtProvider jwtProvider;
 
   /**
    * UserDetailsService.
@@ -49,6 +49,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
+    log.info("URI: {}", request.getRequestURI());
     this.authenticate(request);
     filterChain.doFilter(request, response);
   }
@@ -63,15 +64,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     // 토큰 검증.
     String token = this.getTokenFromRequest(request);
-    if (!jwtTokenProvider.validToken(token)) {
+    if (!jwtProvider.validToken(token)) {
       return;
     }
 
     // 토큰으로부텨 username을 추출.
-    String username = this.jwtTokenProvider.getUsername(token);
+    String username = this.jwtProvider.getUsername(token);
 
     // username에 해당되는 사용자를 찾는다.
-    UserDetails userDetails = this.loadUser(username);
+    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
     // SecurityContext에 인증 객체 저장.
     this.setAuthentication(request, userDetails);
@@ -85,7 +86,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
    */
   private String getTokenFromRequest(HttpServletRequest request) {
     final String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-    final String headerPrefix = TokenType.generateHeaderPrefix(TokenType.BEARER);
+    final String headerPrefix = AuthenticationScheme.generateType(AuthenticationScheme.BEARER);
 
     boolean tokenFound =
         StringUtils.hasText(bearerToken) && bearerToken.startsWith(headerPrefix);
@@ -94,16 +95,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     return null;
-  }
-
-  /**
-   * username에 해당되는 사용자를 찾는다.
-   *
-   * @param username 사용자를 찾을 username
-   * @return {@link UserDetails}
-   */
-  private UserDetails loadUser(String username) {
-    return userDetailsService.loadUserByUsername(username);
   }
 
   /**

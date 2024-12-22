@@ -9,6 +9,8 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
       ddl-auto: update
     properties:
       hibernate:
@@ -21,13 +23,18 @@ spring:
       settings:
         web-allow-others: true
 
+# 테스트를 위해 로그 레벨을 설정했습니다. (운영 환경에서는 수정 필요)
 logging:
   level:
     com.sparta.nbcamp7lecturespringsecurityh2: DEBUG
-    org.springframework.security: DEBUG
+    org.springframework.security: TRACE
 
 jwt:
-  # JWT secret key(실제 운영 환경에서는 환경 변수를 이용하세요. 생성 - https://jwt-keys.21no.de/)
-  secret: "036c4fe3ec667532545b9e8fa7e2a98a22f439dff102623c097715060e2da68c"
-  # 토큰 만료시간 (밀리초)
-  expiry-millis: 300000 # 5분
+  access:
+    # JWT secret key (실제 운영 환경에서는 환경 변수를 이용하세요. 생성 - https://jwt-keys.21no.de/)
+    secret: "036c4fe3ec667532545b9e8fa7e2a98a22f439dff102623c097715060e2da68c"
+    # 토큰 만료시간 (밀리초)
+    expiry-millis: 30000 # 30초 (테스트를 위해 짧게 설정했습니다)
+  refresh:
+    # 토큰 만료시간 (밀리초)
+    expiry-millis: 300000 # 5분 (테스트를 위해 짧게 설정했습니다)

@@ -1,6 +1,9 @@
 package com.sparta.nbcamp7lecturespringsecurityh2.exception;
 
 import com.sparta.nbcamp7lecturespringsecurityh2.dto.common.CommonResponseBody;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import java.nio.file.AccessDeniedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  * create on 2024. 12. 21. create by IntelliJ IDEA.
@@ -38,7 +42,7 @@ public class GlobalExceptionHandler {
 
     return ResponseEntity
         .status(HttpStatus.BAD_REQUEST)
-        .body(new CommonResponseBody<>(message, null));
+        .body(new CommonResponseBody<>(message));
   }
 
   /**
@@ -54,7 +58,7 @@ public class GlobalExceptionHandler {
 
     return ResponseEntity
         .status(HttpStatus.BAD_REQUEST)
-        .body(new CommonResponseBody<>(message, null));
+        .body(new CommonResponseBody<>(message));
   }
 
   /**
@@ -72,7 +76,53 @@ public class GlobalExceptionHandler {
 
     return ResponseEntity
         .status(statusCode)
-        .body(new CommonResponseBody<>(e.getMessage(), null));
+        .body(new CommonResponseBody<>(e.getMessage()));
+  }
+
+  /**
+   * Security와 관련된 AccessDeniedException 예외 처리.
+   *
+   * @param e AccessDeniedException 인스턴스
+   * @return {@code ResponseEntity<CommonResponseBody<Void>>}
+   */
+  @ExceptionHandler(AccessDeniedException.class)
+  protected ResponseEntity<CommonResponseBody<Void>> handleAccessDeniedException(
+      AccessDeniedException e) {
+
+    return ResponseEntity
+        .status(HttpStatus.UNAUTHORIZED)
+        .body(new CommonResponseBody<>(e.getMessage()));
+  }
+
+  /**
+   * JWT와 관련된 JwtException 예외 처리.
+   *
+   * @param e JwtException 인스턴스
+   * @return {@code ResponseEntity<CommonResponseBody<Void>>}
+   */
+  @ExceptionHandler(JwtException.class)
+  protected ResponseEntity<CommonResponseBody<Void>> handleJwtException(JwtException e) {
+    HttpStatus httpStatus = e instanceof ExpiredJwtException
+        ? HttpStatus.UNAUTHORIZED
+        : HttpStatus.FORBIDDEN;
+
+    return ResponseEntity
+        .status(httpStatus)
+        .body(new CommonResponseBody<>(e.getMessage()));
+  }
+
+  /**
+   * ResponseStatusException 예외 처리.
+   *
+   * @param e ResponseStatusException 인스턴스
+   * @return {@code ResponseEntity<CommonResponseBody<Void>>}
+   */
+  @ExceptionHandler(ResponseStatusException.class)
+  protected ResponseEntity<CommonResponseBody<Void>> handleResponseStatusExceptions(
+      ResponseStatusException e) {
+    return ResponseEntity
+        .status(e.getStatusCode())
+        .body(new CommonResponseBody<>(e.getMessage()));
   }
 
   /**
@@ -85,6 +135,6 @@ public class GlobalExceptionHandler {
   protected ResponseEntity<CommonResponseBody<Void>> handleOtherExceptions(Exception e) {
     return ResponseEntity
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .body(new CommonResponseBody<>(e.getMessage(), null));
+        .body(new CommonResponseBody<>(e.getMessage()));
   }
 }

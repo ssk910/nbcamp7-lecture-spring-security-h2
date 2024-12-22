@@ -1,7 +1,6 @@
 package com.sparta.nbcamp7lecturespringsecurityh2.dto;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,10 +13,14 @@ import lombok.NoArgsConstructor;
  * @version 1.0
  * @since 1.0
  */
-@AllArgsConstructor
 @Getter
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class JwtAuthResponse {
+
+  /**
+   * access token 인증 방식.
+   */
+  private String accessTokenAuthScheme;
 
   /**
    * access token.
@@ -25,12 +28,16 @@ public class JwtAuthResponse {
   private String accessToken;
 
   /**
-   * 토큰 종류.
+   * refresh token.
    */
-  private String tokenType;
+  private String refreshToken;
 
   /**
-   * 토큰 만료 시간.
+   * 생성자.
    */
-  private Long expiresIn;
+  public JwtAuthResponse(String accessTokenAuthScheme, String accessToken, String refreshToken) {
+    this.accessTokenAuthScheme = accessTokenAuthScheme;
+    this.accessToken = accessToken;
+    this.refreshToken = refreshToken;
+  }
 }

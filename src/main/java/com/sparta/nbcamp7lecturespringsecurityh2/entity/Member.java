@@ -56,7 +56,7 @@ public class Member extends BaseEntity {
   /**
    * 생성자.
    *
-   * @param email 사용자 이메일
+   * @param email    사용자 이메일
    * @param password 비밀번호
    */
   public Member(String email, String password) {
@@ -67,7 +67,7 @@ public class Member extends BaseEntity {
   /**
    * 생성자.
    *
-   * @param email 사용자 이메일
+   * @param email    사용자 이메일
    * @param password 비밀번호
    * @param role     사용자의 권한
    */
