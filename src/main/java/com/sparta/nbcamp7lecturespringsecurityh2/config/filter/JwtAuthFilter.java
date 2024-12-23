@@ -108,7 +108,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     // 찾아온 사용자 정보로 인증 객체를 생성.
     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-        userDetails, null, userDetails.getAuthorities());
+        userDetails, userDetails.getPassword(), userDetails.getAuthorities());
     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
     // SecurityContext에 인증 객체 저장.
