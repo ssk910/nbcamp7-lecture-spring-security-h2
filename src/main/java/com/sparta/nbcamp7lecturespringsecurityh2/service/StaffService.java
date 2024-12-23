@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 /**
  * create on 2024. 12. 23. create by IntelliJ IDEA.
  *
- * <p> STAFF 권한으로 접근할 수 있는 API. </p>
+ * <p> STAFF 권한 관련 서비스. </p>
  *
  * @author Seokgyu Hwang (Chris)
  * @version 1.0

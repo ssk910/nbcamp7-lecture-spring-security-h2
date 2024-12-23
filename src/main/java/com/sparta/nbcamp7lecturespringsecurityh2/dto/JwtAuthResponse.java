@@ -26,6 +26,7 @@ public class JwtAuthResponse {
    * access token.
    */
   private String accessToken;
+
   /**
    * 생성자.
    */

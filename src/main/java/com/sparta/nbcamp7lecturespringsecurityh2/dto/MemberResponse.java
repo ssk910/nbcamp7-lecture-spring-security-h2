@@ -5,7 +5,7 @@ import lombok.Getter;
 /**
  * create on 2024. 12. 23. create by IntelliJ IDEA.
  *
- * <p> 클래스 설명 </p>
+ * <p> 사용자 정보를 담은 response DTO 정의. </p>
  *
  * @author Seokgyu Hwang (Chris)
  * @version 1.0
@@ -14,10 +14,22 @@ import lombok.Getter;
 @Getter
 public class MemberResponse {
 
+  /**
+   * 식별자.
+   */
   private final Long id;
+  /**
+   * 사용자 이메일.
+   */
   private final String email;
+  /**
+   * 사용자 권한.
+   */
   private final String role;
 
+  /**
+   * 생성자.
+   */
   public MemberResponse(Long id, String email, String role) {
     this.id = id;
     this.email = email;

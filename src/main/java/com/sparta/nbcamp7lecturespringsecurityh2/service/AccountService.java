@@ -58,6 +58,12 @@ public class AccountService {
     ));
   }
 
+  /**
+   * 로그인.
+   *
+   * @param accountRequest {@link AccountRequest} DTO 객체
+   * @return {@link JwtAuthResponse}
+   */
   public JwtAuthResponse login(AccountRequest accountRequest) {
     // 사용자 확인.
     Member member = this.memberRepository.findByEmail(accountRequest.getEmail())
@@ -73,7 +79,7 @@ public class AccountService {
 
     // 토큰 생성
     String accessToken = this.jwtProvider.generateToken(authentication);
-    log.info("토큰 생성.");
+    log.info("토큰 생성: {}", accessToken);
 
     return new JwtAuthResponse(AuthenticationScheme.BEARER.getName(), accessToken);
   }
