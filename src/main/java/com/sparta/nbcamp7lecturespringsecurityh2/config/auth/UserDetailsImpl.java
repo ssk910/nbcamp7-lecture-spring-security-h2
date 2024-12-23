@@ -66,7 +66,7 @@ public class UserDetailsImpl implements UserDetails {
    * 계정 만료.
    *
    * @return 사용 여부
-   * @apiNote 사용할 경우 true를 리턴하도록 재정의.
+   * @apiNote 사용하지 않을 경우 true를 리턴하도록 재정의.
    */
   @Override
   public boolean isAccountNonExpired() {
@@ -77,7 +77,7 @@ public class UserDetailsImpl implements UserDetails {
    * 계정 잠금.
    *
    * @return 사용 여부
-   * @apiNote 사용할 경우 true를 리턴하도록 재정의.
+   * @apiNote 사용하지 않을 경우 true를 리턴하도록 재정의.
    */
   @Override
   public boolean isAccountNonLocked() {
@@ -88,7 +88,7 @@ public class UserDetailsImpl implements UserDetails {
    * 자격 증명 만료.
    *
    * @return 사용 여부
-   * @apiNote 사용할 경우 true를 리턴하도록 재정의.
+   * @apiNote 사용하지 않을 경우 true를 리턴하도록 재정의.
    */
   @Override
   public boolean isCredentialsNonExpired() {
@@ -96,7 +96,7 @@ public class UserDetailsImpl implements UserDetails {
   }
 
   /**
-   * 계정 비활성화.
+   * 계정 활성화.
    *
    * @return 사용 여부
    * @apiNote 사용할 경우 true를 리턴하도록 재정의.
