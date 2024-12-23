@@ -38,10 +38,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
    */
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    Member customer = this.memberRepository.findByEmail(username)
+    Member member = this.memberRepository.findByEmail(username)
         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
     log.info("찾은 사용자: {}", username);
-    return new UserDetailsImpl(customer);
+    return new UserDetailsImpl(member);
   }
 }
