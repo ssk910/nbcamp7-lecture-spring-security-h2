@@ -51,7 +51,8 @@ public class WebConfig {
   /**
    * 화이트 리스트.
    */
-  private static final String[] WHITE_LIST = {"/accounts/login", "/favicon.ico", "/error"};
+  private static final String[] WHITE_LIST = {"/accounts/login", "/accounts/join", "/favicon.ico",
+      "/error"};
 
   /**
    * security 필터.

@@ -1,12 +1,12 @@
 package com.sparta.nbcamp7lecturespringsecurityh2.service;
 
-import com.sparta.nbcamp7lecturespringsecurityh2.dto.JwtAuthResponse;
 import com.sparta.nbcamp7lecturespringsecurityh2.dto.AccountRequest;
+import com.sparta.nbcamp7lecturespringsecurityh2.dto.JwtAuthResponse;
 import com.sparta.nbcamp7lecturespringsecurityh2.entity.Member;
 import com.sparta.nbcamp7lecturespringsecurityh2.entity.Role;
 import com.sparta.nbcamp7lecturespringsecurityh2.repository.MemberRepository;
-import com.sparta.nbcamp7lecturespringsecurityh2.util.JwtProvider;
 import com.sparta.nbcamp7lecturespringsecurityh2.util.AuthenticationScheme;
+import com.sparta.nbcamp7lecturespringsecurityh2.util.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
@@ -36,7 +36,6 @@ public class AccountService {
   private final PasswordEncoder passwordEncoder;
   private final AuthenticationManager authenticationManager;
   private final JwtProvider jwtProvider;
-  private final RefreshTokenService refreshTokenService;
 
   /**
    * 이메일이 중복되지 않으면 가입처리.
@@ -74,10 +73,9 @@ public class AccountService {
 
     // 토큰 생성
     String accessToken = this.jwtProvider.generateToken(authentication);
-    String refreshToken = this.refreshTokenService.generateRefreshToken(accountRequest.getEmail());
     log.info("토큰 생성.");
 
-    return new JwtAuthResponse(AuthenticationScheme.BEARER.getName(), accessToken, refreshToken);
+    return new JwtAuthResponse(AuthenticationScheme.BEARER.getName(), accessToken);
   }
 
   /**

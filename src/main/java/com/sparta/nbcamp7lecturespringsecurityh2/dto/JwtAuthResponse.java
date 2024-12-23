@@ -20,24 +20,17 @@ public class JwtAuthResponse {
   /**
    * access token 인증 방식.
    */
-  private String accessTokenAuthScheme;
+  private String tokenAuthScheme;
 
   /**
    * access token.
    */
   private String accessToken;
-
-  /**
-   * refresh token.
-   */
-  private String refreshToken;
-
   /**
    * 생성자.
    */
-  public JwtAuthResponse(String accessTokenAuthScheme, String accessToken, String refreshToken) {
-    this.accessTokenAuthScheme = accessTokenAuthScheme;
+  public JwtAuthResponse(String tokenAuthScheme, String accessToken) {
+    this.tokenAuthScheme = tokenAuthScheme;
     this.accessToken = accessToken;
-    this.refreshToken = refreshToken;
   }
 }

@@ -39,14 +39,14 @@ public class JwtProvider {
   /**
    * JWT 시크릿 키.
    */
-  @Value("${jwt.access.secret}")
+  @Value("${jwt.secret}")
   private String secret;
 
   /**
    * 토큰 만료시간(밀리초).
    */
   @Getter
-  @Value("${jwt.access.expiry-millis}")
+  @Value("${jwt.expiry-millis}")
   private long expiryMillis;
 
   /**
