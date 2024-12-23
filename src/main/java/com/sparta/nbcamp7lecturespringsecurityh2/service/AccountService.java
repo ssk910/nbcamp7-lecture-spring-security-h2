@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * create on 2024. 12. 21. create by IntelliJ IDEA.
@@ -44,6 +45,7 @@ public class AccountService {
    * @param role           {@link Role}
    * @throws DuplicateKeyException 입력받은 이메일에 대한 사용자가 이미 있을 경우
    */
+  @Transactional
   public void createAccount(AccountRequest accountRequest, String role)
       throws DuplicateKeyException {
     boolean duplicated = this.memberRepository.findByEmail(accountRequest.getEmail()).isPresent();
