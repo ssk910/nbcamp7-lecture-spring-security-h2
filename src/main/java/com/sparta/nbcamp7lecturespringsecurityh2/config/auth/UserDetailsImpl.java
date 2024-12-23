@@ -63,7 +63,7 @@ public class UserDetailsImpl implements UserDetails {
   }
 
   /**
-   * 께정 만료.
+   * 계정 만료.
    *
    * @return 사용 여부
    * @apiNote 사용할 경우 true를 리턴하도록 재정의.
