@@ -39,6 +39,6 @@ public class StaffController {
 
     return ResponseEntity
         .status(HttpStatus.OK)
-        .body(new CommonResponseBody<>("USER 권한으로 접근 성공.", memberResponse));
+        .body(new CommonResponseBody<>("STAFF 권한으로 접근 성공.", memberResponse));
   }
 }
