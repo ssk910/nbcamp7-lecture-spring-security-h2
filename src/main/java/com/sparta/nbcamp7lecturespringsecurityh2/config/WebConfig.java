@@ -17,6 +17,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
@@ -49,6 +50,11 @@ public class WebConfig {
   private final AuthenticationEntryPoint authEntryPoint;
 
   /**
+   * AccessDeniedHandler.
+   */
+  private final AccessDeniedHandler accessDeniedHandler;
+
+  /**
    * 화이트 리스트.
    */
   private static final String[] WHITE_LIST = {"/accounts/login", "/accounts/join", "/favicon.ico",
@@ -70,13 +76,18 @@ public class WebConfig {
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE,
                     DispatcherType.ERROR).permitAll()
+                // path 별로 접근이 가능한 권한 설정
                 .requestMatchers("/accounts/logout").hasAnyRole("ADMIN", "STAFF", "USER")
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/staff/**").hasRole("STAFF")
+                .requestMatchers("/user/**").hasRole("USER")
                 .anyRequest().authenticated()
         )
         // Spring Security 예외에 대한 처리를 핸들러에 위임.
-        .exceptionHandling(handler ->
-            handler.authenticationEntryPoint(authEntryPoint)
-        )
+        .exceptionHandling(handler -> {
+          handler.authenticationEntryPoint(authEntryPoint);
+          handler.accessDeniedHandler(accessDeniedHandler);
+        })
         // JWT 기반 테스트를 위해 SecurityContext를 가져올 때 HttpSession을 사용하지 않도록 설정.
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

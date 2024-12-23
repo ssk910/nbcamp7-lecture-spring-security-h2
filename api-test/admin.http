@@ -1,9 +1,9 @@
 ## Variables
-@email = user@sparta.com
-@password = P@ssw0rd
-@role = user
+@email = admin@sparta.com
+@password = P@ssw0rd@dm1n
+@role = admin
 
-### 유저 계정 등록
+### 어드민 계정 등록
 POST http://localhost:8080/accounts/join?role={{role}}
 Content-Type: application/json
 
@@ -12,7 +12,7 @@ Content-Type: application/json
   "password": "{{password}}"
 }
 
-### 유저 로그인
+### 어드민 로그인
 POST http://localhost:8080/accounts/login
 Content-Type: application/json
 
@@ -29,16 +29,16 @@ Content-Type: application/json
 GET http://localhost:8080/accounts/me
 Authorization: Bearer {{accessToken}}
 
-### 유저 권한 로직
-GET http://localhost:8080/user/something
-Authorization: Bearer {{accessToken}}
-
-### 다른 권한의 엔드포인트 접근 - 어드민
+### 어드민 권한 로직
 GET http://localhost:8080/admin/something
 Authorization: Bearer {{accessToken}}
 
 ### 다른 권한의 엔드포인트 접근 - 스탭
 GET http://localhost:8080/staff/something
+Authorization: Bearer {{accessToken}}
+
+### 다른 권한의 엔드포인트 접근 - 유저
+GET http://localhost:8080/user/something
 Authorization: Bearer {{accessToken}}
 
 ### 로그아웃

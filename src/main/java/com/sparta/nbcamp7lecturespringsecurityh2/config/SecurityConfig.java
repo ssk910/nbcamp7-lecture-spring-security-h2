@@ -49,7 +49,7 @@ public class SecurityConfig {
   @Bean
   public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
       throws Exception {
-    log.debug("AuthenticationManager에 위임.");
+    log.info("AuthenticationManager에 위임.");
     return config.getAuthenticationManager();
   }
 
@@ -61,13 +61,13 @@ public class SecurityConfig {
   @Bean
   AuthenticationProvider authenticationProvider() {
     DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-    log.debug("AuthenticationProvider 설정. 구현체: {}", authProvider.getClass().getSimpleName());
+    log.info("AuthenticationProvider 설정. 구현체: {}", authProvider.getClass().getSimpleName());
 
-    log.debug("UserDetailsService에 사용자 관리 위임. 구현체: {}",
+    log.info("UserDetailsService에 사용자 관리 위임. 구현체: {}",
         this.userDetailsService.getClass().getSimpleName());
     authProvider.setUserDetailsService(this.userDetailsService);
 
-    log.debug("PasswordEncoder에 암호 검증 위임. 구현체: {}",
+    log.info("PasswordEncoder에 암호 검증 위임. 구현체: {}",
         this.passwordEncoder().getClass().getSimpleName());
     authProvider.setPasswordEncoder(passwordEncoder());
 

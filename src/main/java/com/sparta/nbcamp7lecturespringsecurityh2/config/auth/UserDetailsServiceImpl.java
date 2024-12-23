@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-@Slf4j
+@Slf4j(topic = "Security::UserDetailsServiceImpl")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
   /**
@@ -41,7 +41,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     Member customer = this.memberRepository.findByEmail(username)
         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-    log.debug("찾은 사용자: {}", username);
+    log.info("찾은 사용자: {}", username);
     return new UserDetailsImpl(customer);
   }
 }

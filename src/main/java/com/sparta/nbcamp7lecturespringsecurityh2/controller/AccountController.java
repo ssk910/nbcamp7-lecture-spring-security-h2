@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version 1.0
  * @since 1.0
  */
-@Slf4j
+@Slf4j(topic = "Security::AccountController")
 @RestController
 @RequestMapping(value = "/accounts")
 @RequiredArgsConstructor

@@ -21,7 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 @Getter
 @RequiredArgsConstructor
-@Slf4j
+@Slf4j(topic = "Security::UserDetailsImpl")
 public class UserDetailsImpl implements UserDetails {
 
   /**
@@ -37,7 +37,7 @@ public class UserDetailsImpl implements UserDetails {
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     Role role = this.member.getRole();
-    log.debug("사용자 권한: {}", role.getAuthorities());
+    log.info("사용자 권한: {}", role.getAuthorities());
 
     return new ArrayList<>(role.getAuthorities());
   }

@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -88,6 +89,21 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(AccessDeniedException.class)
   protected ResponseEntity<CommonResponseBody<Void>> handleAccessDeniedException(
       AccessDeniedException e) {
+
+    return ResponseEntity
+        .status(HttpStatus.UNAUTHORIZED)
+        .body(new CommonResponseBody<>(e.getMessage()));
+  }
+
+  /**
+   * Security와 관련된 AuthorizationDeniedException 예외 처리.
+   *
+   * @param e AuthorizationDeniedException 인스턴스
+   * @return {@code ResponseEntity<CommonResponseBody<Void>>}
+   */
+  @ExceptionHandler(AuthorizationDeniedException.class)
+  protected ResponseEntity<CommonResponseBody<Void>> handleAuthorizationDeniedException(
+      AuthorizationDeniedException e) {
 
     return ResponseEntity
         .status(HttpStatus.UNAUTHORIZED)
