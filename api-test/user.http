@@ -23,26 +23,11 @@ Content-Type: application/json
 
 > {%
   client.global.set("accessToken", response.body.data.accessToken);
-  client.global.set("refreshToken", response.body.data.refreshToken);
 %}
 
 ### 현재 사용자의 인증정보 확인
 GET http://localhost:8080/accounts/me
 Authorization: Bearer {{accessToken}}
-
-### access token 재발급
-POST http://localhost:8080/token/reissue
-Authorization: Bearer {{accessToken}}
-Content-Type: application/json
-
-{
-  "refreshToken": "{{refreshToken}}"
-}
-
-> {%
-  client.global.set("accessToken", response.body.data.accessToken);
-  client.global.set("refreshToken", response.body.data.refreshToken);
-%}
 
 ### 로그아웃
 POST http://localhost:8080/accounts/logout
