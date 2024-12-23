@@ -78,11 +78,10 @@ public class WebConfig {
                 .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE,
                     DispatcherType.ERROR).permitAll()
                 // path 별로 접근이 가능한 권한 설정
-                .requestMatchers("/accounts/logout").hasAnyRole("ADMIN", "STAFF", "USER")
-                .requestMatchers("/accounts/me").hasAnyRole("ADMIN", "STAFF", "USER")
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/staff/**").hasRole("STAFF")
                 .requestMatchers("/user/**").hasRole("USER")
+                // 나머지는 인증이 필요
                 .anyRequest().authenticated()
         )
         // Spring Security 예외에 대한 처리를 핸들러에 위임.
