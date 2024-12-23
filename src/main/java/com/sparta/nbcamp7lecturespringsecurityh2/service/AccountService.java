@@ -14,7 +14,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,12 +66,7 @@ public class AccountService {
    * @return {@link JwtAuthResponse}
    */
   public JwtAuthResponse login(AccountRequest accountRequest) {
-    // 사용자 확인.
-    Member member = this.memberRepository.findByEmail(accountRequest.getEmail())
-        .orElseThrow(() -> new UsernameNotFoundException("이메일에 해당하는 사용자를 찾을 수 없습니다."));
-    this.validatePassword(accountRequest.getPassword(), member.getPassword());
-
-    // 사용자 인증 후 인증 객체를 저장
+    // 필터에서 사용자 인증된 후 인증 객체를 저장
     Authentication authentication = this.authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(accountRequest.getEmail(),
             accountRequest.getPassword()));
@@ -84,20 +78,5 @@ public class AccountService {
     log.info("토큰 생성: {}", accessToken);
 
     return new JwtAuthResponse(AuthenticationScheme.BEARER.getName(), accessToken);
-  }
-
-  /**
-   * 암호를 검증한다. 인코딩 전후의 암호를 입력받아 결과가 일치하는지 확인한다.
-   *
-   * @param rawPassword     인코딩 전의 암호
-   * @param encodedPassword 인코딩 된 암호
-   * @throws IllegalArgumentException 암호가 일치하지 않을 때
-   */
-  private void validatePassword(String rawPassword, String encodedPassword)
-      throws IllegalArgumentException {
-    boolean notValid = !this.passwordEncoder.matches(rawPassword, encodedPassword);
-    if (notValid) {
-      throw new IllegalArgumentException("비밀번호가 올바르지 않습니다.");
-    }
   }
 }
