@@ -31,7 +31,7 @@ public class RefreshToken {
   private int id;
 
   /**
-   * 토큰.
+   * 토큰. (단순한 예제를 위해 UUID를 사용했습니다)
    */
   private String token;
 
