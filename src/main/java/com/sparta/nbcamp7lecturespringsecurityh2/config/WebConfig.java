@@ -18,7 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
 
 /**
  * create on 2024. 12. 21. create by IntelliJ IDEA.
@@ -92,7 +92,14 @@ public class WebConfig {
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authenticationProvider(authenticationProvider)
-        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        /*
+         * Spring Security와 관련된 예외(AuthenticationException, AccessDeniedException)는
+         * ExceptionTranslationFilter에서 처리가 된다.
+         *
+         * ExceptionTranslationFilter의 doFilter()는 이후의 필터 체인에서 예외가 발생하면 그 예외를 처리하도록 작성되어 있다.
+         * request를 넘겨 JwtAuthFilter에서 발생한 예외를 처리시키기 위해 ExceptionTranslationFilter 다음에 수행하도록 순서를 설정.
+         */
+        .addFilterAfter(jwtAuthFilter, ExceptionTranslationFilter.class);
 
     return http.build();
   }
